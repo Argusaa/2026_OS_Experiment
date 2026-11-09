@@ -1,0 +1,45 @@
+# ---- Codex workspace ----
+AGENTS.md
+.work/
+.tmp/
+reports/
+docs/
+docs/
+
+
+# ---- Rust / OS build outputs ----
+target/
+**/*.rs.bk
+Cargo.lock.bak
+
+# ---- C / asm objects, images, maps ----
+*.o
+*.a
+*.so
+*.elf
+*.bin
+*.img
+*.map
+*.d
+
+# ---- editor / IDE ----
+.vscode/
+.idea/
+*.swp
+*~
+~$*
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ---- env & secrets ----
+.env
+.env.*
+*.pem
+*.key
+*.p12
+
+# ---- logs & temp ----
+*.log
+logs/
+tmp/
