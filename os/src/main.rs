@@ -1,32 +1,28 @@
 #![no_std]
 #![no_main]
 
-mod console;
-
-use console::sys_exit;
+use core::arch::global_asm;
 use core::panic::PanicInfo;
+
+global_asm!(include_str!("entry.asm"));
+
+fn clear_bss() {
+    unsafe extern "C" {
+        fn sbss();
+        fn ebss();
+    }
+    let sbss_ptr = sbss as *const () as usize;
+    let ebss_ptr = ebss as *const () as usize;
+    (sbss_ptr..ebss_ptr).for_each(|a| unsafe { (a as *mut u8).write_volatile(0) });
+}
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }
 
-#[macro_export]
-macro_rules! print {
-    ($fmt: expr $(, $($arg: tt)+)?) => {
-        $crate::console::print(format_args!($fmt $(, $($arg)+)?));
-    }
-}
-
-#[macro_export]
-macro_rules! println {
-    ($fmt: expr $(, $($arg: tt)+)?) => {
-        $crate::print!(concat!($fmt, "\n") $(, $($arg)+)?);
-    }
-}
-
 #[unsafe(no_mangle)]
-extern "C" fn _start() {
-    println!("Hello, world!");
-    sys_exit(0);
+pub fn rust_main() -> ! {
+    clear_bss();
+    loop {}
 }
